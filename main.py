@@ -2,6 +2,7 @@ import webbrowser
 
 from fpdf import FPDF
 
+
 class Bill:
     """
     Object that contains data about a bill, such as total amount and period of the bill.
@@ -22,7 +23,7 @@ class Flatmate:
         self.days_in_house = days_in_house
 
     def pays(self, bill, flatmate2):
-        return round(self.days_in_house/(self.days_in_house + flatmate2.days_in_house) * bill.amount,2)
+        return round(self.days_in_house/(self.days_in_house + flatmate2.days_in_house) * bill.amount, 2)
 
 
 class PdfReport:
@@ -51,15 +52,22 @@ class PdfReport:
         pdf.cell(w=150, h=20, txt=f'${flatmate2.pays(bill, flatmate1)}', align='C', border=1, ln=1)
 
         pdf.output(f'{self.filename}')
-
         webbrowser.open(self.filename)
 
 
-the_bill = Bill(amount=120, period="March 2021")
-john = Flatmate(name="John", days_in_house=20)
-marry = Flatmate(name="Marry", days_in_house=25)
-print(f"John Pays: {john.pays(the_bill, marry)}")
-print(f"Marry pays: {marry.pays(the_bill, john)}")
+amount = float(input("Hey user, enter the bill amount: "))
+period = float(input("What is the bill period? E.g. December 2020: "))
+
+name1 = input("What is your name?: ")
+days_in_house1 = int(input(f"How many days did {name1} stay in the house?: "))
+name2 = input("What is the name of the other flatmate?: ")
+days_in_house2 = int(input(f"How many days did {name2} stay in the house?: "))
+
+the_bill = Bill(amount=amount, period=period)
+flatmate1 = Flatmate(name=name1, days_in_house=days_in_house1)
+flatmate2 = Flatmate(name=name2, days_in_house=days_in_house2)
+print(f"John Pays: {flatmate1.pays(the_bill, flatmate2)}")
+print(f"Marry pays: {flatmate2.pays(the_bill, flatmate1)}")
 
 report = PdfReport(filename='bill.pdf')
-report.generate(flatmate1=john, flatmate2=marry, bill=the_bill)
+report.generate(flatmate1=flatmate1, flatmate2=flatmate2, bill=the_bill)
