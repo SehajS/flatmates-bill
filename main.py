@@ -36,26 +36,6 @@ class BillFormPage(MethodView):
                                name2=flatmate2.name,
                                amount2=flatmate2.pays(the_bill, flatmate1))
 
-class ResultsPage(MethodView):
-    def post(self):
-        bill_form = BillForm(request.form)
-        amount = float(bill_form.amount.data)
-        period = bill_form.period.data
-        name1 = bill_form.name1.data
-        name2 = bill_form.name2.data
-        days_in_house1 = int(bill_form.days_in_house1.data)
-        days_in_house2 = int(bill_form.days_in_house2.data)
-
-        the_bill = flat.Bill(amount, period)
-        flatmate1 = flat.Flatmate(name1, days_in_house1)
-        flatmate2 = flat.Flatmate(name2, days_in_house2)
-
-        return render_template('results.html',
-                               name1=flatmate1.name,
-                               amount1=flatmate1.pays(the_bill, flatmate2),
-                               name2=flatmate2.name,
-                               amount2=flatmate2.pays(the_bill, flatmate1))
-
 
 class BillForm(Form):
     amount = StringField("Bill Amount: ", default="100")
